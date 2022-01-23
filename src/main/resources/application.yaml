@@ -1,0 +1,21 @@
+
+
+server:
+  port: 8082
+
+gecko:
+  api:
+    url: https://api.coingecko.com/api/v3/
+
+feign:
+  hystrix:
+    enabled: false
+
+---
+
+spring:
+  profiles:
+    active: development
+
+server:
+  port: ${SERVER_PORT:8082}
