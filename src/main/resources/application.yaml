@@ -1,4 +1,11 @@
+spring:
+  application:
+    name: Practice Feign Application
 
+  data:
+    mongodb:
+      database: catalog
+      port: 27017
 
 server:
   port: 8082
@@ -10,6 +17,7 @@ gecko:
 feign:
   hystrix:
     enabled: false
+
 
 ---
 

@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class CoinResponse {
+public class CoinResponse implements Comparable<CoinResponse> {
 
     private String [] ids;
     private String [] currencies;
@@ -15,4 +15,8 @@ public class CoinResponse {
     private Boolean include24HrVol;
     private Boolean include24HrChange;
 
+    @Override
+    public int compareTo(CoinResponse o) {
+        return 0;
+    }
 }

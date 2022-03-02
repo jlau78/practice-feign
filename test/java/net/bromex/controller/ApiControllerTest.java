@@ -1,6 +1,7 @@
 package net.bromex.controller;
 
 import net.bromex.client.GeckoClient;
+import net.bromex.client.GekcoRestTemplateClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import net.bromex.model.dto.CoinResponse;
+import org.springframework.test.context.event.annotation.BeforeTestMethod;
 
 import java.util.Arrays;
 
@@ -23,7 +25,9 @@ import static org.mockito.ArgumentMatchers.anyBoolean;
 public class ApiControllerTest {
 
     @Mock
-    GeckoClient geckoClient;
+    GeckoClient mockGeckoClient;
+    @Mock
+    GekcoRestTemplateClient mockGekcoRestTemplateClient;
 
     @InjectMocks
     ApiController testObj;
@@ -39,13 +43,11 @@ public class ApiControllerTest {
 
     @BeforeEach
     public void setUp() {
-        testObj = new ApiController(geckoClient);
-
-        when(geckoClient.getSimplePrice(any(String[].class), any(String[].class), anyBoolean())).thenReturn(buildCoinResponse());
     }
 
     @Test
-    public void testGetCoinSuccess() {
+    public void testGetCoinSuccessWithFeignClient() {
+        when(mockGeckoClient.getSimplePrice(any(String[].class), any(String[].class), anyBoolean())).thenReturn(buildCoinResponse());
         ResponseEntity<CoinResponse> response = testObj.getCoins(new String[]{COIN_ID_BTC, COIN_ID_ETH, COIN_ID_SOL}
                 , new String[]{CUR_GBP, CUR_USD}
                 , Boolean.TRUE);
@@ -56,6 +58,16 @@ public class ApiControllerTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertTrue(Arrays.asList(response.getBody().getIds()).contains(COIN_ID_ETH));
 //        assertEquals(coinResponse.getIds(), response.getBody().getIds());
+    }
+
+    @Test
+    public void testGetCoinSuccessWithRestTemplate() {
+        when(mockGekcoRestTemplateClient.getCoins()).thenReturn(responseCoinSuccess);
+        ResponseEntity<CoinResponse> response = testObj.getCoinsWithRestTemplate(new String[]{COIN_ID_BTC}
+                , new String[]{CUR_USD}
+                , Boolean.TRUE);
+
+        assertNotNull(response);
     }
 
     private CoinResponse buildCoinResponse() {
