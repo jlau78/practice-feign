@@ -14,15 +14,19 @@ import org.springframework.web.bind.annotation.RequestParam;
         , configuration = ApplicationConfig.class)
 public interface GeckoClient {
 
-    @RequestMapping(method = RequestMethod.GET,value = "/ping", produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(method = RequestMethod.GET, value = "/ping", produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<String> getPing();
 
     @RequestMapping(method = RequestMethod.GET, value = "/simple/price"
             , consumes = MediaType.APPLICATION_JSON_VALUE
             , produces = MediaType.APPLICATION_JSON_VALUE)
-    CoinResponse getSimplePrice(@RequestParam("ids") String [] ids,
-                                                @RequestParam("vs_currencies") String [] currencies,
-                                                @RequestParam("includeMarketCap") Boolean includeMarketCap
+    Object getSimplePrice(@RequestParam("ids") String[] ids
+            , @RequestParam( value = "vs_currencies", required = true) String[] currencies
+            , @RequestParam(value = "include_market_cap", required = false) Boolean includeMarketCap
+            , @RequestParam(value = "include_24hr_vol", required = false) Boolean include24hrVol
+            , @RequestParam(value = "include_24hr_change", required = false) Boolean include24hrChange
+            , @RequestParam(value = "include_last_updated_at", required = false) Boolean includeLastUpdatedAt
+
     );
 
 

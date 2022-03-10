@@ -4,7 +4,7 @@ spring:
 
   data:
     mongodb:
-      database: catalog
+      database: coin
       port: 27017
 
 server:
@@ -12,12 +12,19 @@ server:
 
 gecko:
   api:
-    url: https://api.coingecko.com/api/v3/
+    url: https://api.coingecko.com/api/v3
+
+restTemplate:
+  readTimeout: 10000
+  connectTimeout: 3000
 
 feign:
   hystrix:
     enabled: false
 
+logging:
+  level:
+    root: INFO
 
 ---
 
@@ -27,3 +34,12 @@ spring:
 
 server:
   port: ${SERVER_PORT:8082}
+
+logging:
+  level:
+    root: INFO
+    org.apache.http.wire: DEBUG
+    httpclient.wire: DEBUG
+    org.apache.tomcat.util.http: DEBUG
+    org.springframework.web.servlet: DEBUG
+    sun.net.www.protocol.http: DEBUG

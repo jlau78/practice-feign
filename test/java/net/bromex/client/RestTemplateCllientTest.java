@@ -18,6 +18,9 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -53,11 +56,12 @@ public class RestTemplateCllientTest {
 
     @Test
     public void testHttpGet() {
-        Object response = testObj.httpGet(SIMPLE_PRICE_URI, CoinResponse.class);
+        Map<String, Object> params = new HashMap<>();
+        Object response = testObj.httpGet(SIMPLE_PRICE_URI, params, CoinResponse.class);
 
         assertNotNull(testObj);
         assertNotNull(response);
-        verify(mockRestTemplate).exchange(SIMPLE_PRICE_URI, HttpMethod.GET, new HttpEntity(null), CoinResponse.class);
+        verify(mockRestTemplate).exchange(SIMPLE_PRICE_URI, HttpMethod.GET, new HttpEntity(params), CoinResponse.class);
 
     }
 
