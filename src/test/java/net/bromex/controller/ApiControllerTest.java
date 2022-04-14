@@ -21,23 +21,20 @@ import java.util.HashMap;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
+import static net.bromex.model.dto.CoinId.*;
 
 @ExtendWith(MockitoExtension.class)
 public class ApiControllerTest {
 
     @Mock
     GeckoCoinService mockGeckoCoinService;
-    @Mock
-    GeckoClient mockGeckoClient;
+
     @Mock
     GekcoRestTemplateClient mockGekcoRestTemplateClient;
 
     @InjectMocks
     ApiController testObj;
 
-    private static final String COIN_ID_BTC = "bitcoin";
-    private static final String COIN_ID_ETH = "ethereum";
-    private static final String COIN_ID_SOL = "solana";
     private static final String CUR_USD = "usd";
     private static final String CUR_GBP = "gbp";
 
@@ -51,7 +48,7 @@ public class ApiControllerTest {
     @Test
     public void testGetCoinSuccessWithFeignClient() {
         when(mockGeckoCoinService.getAndSaveCoin(any(String[].class), any(String[].class), anyBoolean(), anyBoolean(), anyBoolean(), anyBoolean())).thenReturn(buildCoinResponse());
-        ResponseEntity<Object> response = testObj.getCoins(new String[]{COIN_ID_BTC, COIN_ID_ETH, COIN_ID_SOL}
+        ResponseEntity<Object> response = testObj.getCoins(new String[]{BITCOIN.getGeckoId(), ETHEREUM.getGeckoId(), SOLANA.getGeckoId()}
                 , new String[]{CUR_GBP, CUR_USD}
                 , Boolean.TRUE
                 , Boolean.TRUE
@@ -69,7 +66,7 @@ public class ApiControllerTest {
     @Test
     public void testGetCoinSuccessWithRestTemplate() {
         when(mockGekcoRestTemplateClient.getCoins(anyMap())).thenReturn(responseCoinSuccess);
-        ResponseEntity<Object> response = testObj.getCoinsWithRestTemplate(new String[]{COIN_ID_BTC}
+        ResponseEntity<Object> response = testObj.getCoinsWithRestTemplate(new String[]{BITCOIN.getGeckoId()}
                 , new String[]{CUR_USD}
                 , Boolean.TRUE);
 
@@ -78,7 +75,7 @@ public class ApiControllerTest {
 
     private CoinResponse buildCoinResponse() {
         return CoinResponse.builder()
-                .ids(new String[]{COIN_ID_BTC, COIN_ID_ETH, COIN_ID_SOL})
+                .ids(new String[]{BITCOIN.getGeckoId(), ETHEREUM.getGeckoId(), SOLANA.getGeckoId()})
                 .currencies(new String[]{CUR_USD, CUR_GBP})
                 .include24HrChange(true)
                 .include24HrVol(true)

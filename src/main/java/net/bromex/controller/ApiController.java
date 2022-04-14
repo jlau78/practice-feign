@@ -2,20 +2,16 @@ package net.bromex.controller;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import net.bromex.service.GeckoCoinService;
 import net.bromex.client.GeckoClient;
 import net.bromex.client.GekcoRestTemplateClient;
-import net.bromex.client.RestTemplateClient;
+import net.bromex.service.GeckoCoinService;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import net.bromex.model.dto.CoinResponse;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,6 +25,7 @@ public class ApiController {
     private final GeckoClient geckoClient;
     private final GekcoRestTemplateClient restTemplateClient;
 
+    @Cacheable(value = "coins", key = "#name")
     @GetMapping(path = "/api/v1/coin", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> getCoins(@RequestParam(required = true) String[] ids
             , @RequestParam(value = "currencies", required = true) String[] currencies
@@ -46,6 +43,7 @@ public class ApiController {
         return ResponseEntity.status(HttpStatus.OK).body(coin);
     }
 
+    @Cacheable(value = "Coin", key = "#name")
     @GetMapping(path = "/api/v1/rest/coin", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> getCoinsWithRestTemplate(@RequestParam(required = true) String[] ids
             , @RequestParam(required = true) String[] currencies

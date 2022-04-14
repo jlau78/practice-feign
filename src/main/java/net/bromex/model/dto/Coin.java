@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 public class Coin {
 
     private String id;
+    private String name;
     private Double price;
     private BigDecimal marketCap;
     private BigDecimal volume;
